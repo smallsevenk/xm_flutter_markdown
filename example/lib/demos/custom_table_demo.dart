@@ -15,6 +15,10 @@ const String _markdownData = '''
 | 2025-09-15 | 晴    | 281°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-16 | 多云   | 27°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 ''';
 
 class CustomTableDemo extends StatelessWidget {
@@ -24,6 +28,7 @@ class CustomTableDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var border = BorderSide(color: Colors.grey[200]!, width: 1);
     return Scaffold(
       appBar: AppBar(title: const Text(_title)),
       body: SafeArea(
@@ -31,11 +36,10 @@ class CustomTableDemo extends StatelessWidget {
           data: _markdownData,
           styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
             tableCellsDecoration: BoxDecoration(
-              border: Border.all(color: Colors.blue.shade200, width: 1),
+              border: Border.all(color: Colors.grey[200]!, width: 1),
             ),
             tableColumnWidth: IntrinsicColumnWidth(),
-            // tableHead: const TextStyle(fontWeight: FontWeight.w600),
-            // tableBody: const TextStyle(fontSize: 14),
+            tableBorder: TableBorder(horizontalInside: border, verticalInside: border),
           ),
         ),
       ),

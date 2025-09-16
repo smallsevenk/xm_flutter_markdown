@@ -513,6 +513,7 @@ class MarkdownBuilder implements md.NodeVisitor {
                   controller: tableScrollController,
                   scrollDirection: Axis.horizontal,
                   padding: styleSheet.tablePadding,
+                  physics: ClampingScrollPhysics(),
                   child: child,
                 ),
               );
@@ -522,6 +523,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         } else {
           child = _buildTable();
         }
+        _buildTableConainer(child);
       } else if (tag == 'blockquote') {
         _isInBlockquote = false;
         child = DecoratedBox(
@@ -634,6 +636,53 @@ class MarkdownBuilder implements md.NodeVisitor {
       _currentBlockTag = null;
     }
     _lastVisitedTag = tag;
+  }
+
+  void _buildTableConainer(Widget child) {
+    child = Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(children: [
+          Container(
+            width: double.infinity,
+            height: 44,
+            decoration: BoxDecoration(
+              color: Colors.red,
+              border: BoxBorder.fromLTRB(bottom: BorderSide(color: Colors.red, width: 1)),
+            ),
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(10),
+              child: Row(
+                children: [
+                  Text(
+                    '表格',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () {},
+                    icon: Icon(Icons.copy_all_rounded, size: 20, color: Colors.grey[700]),
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    onPressed: () {},
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(Icons.open_in_full_rounded, size: 20, color: Colors.grey[700]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          child
+        ]));
   }
 
   Table _buildTable() {
