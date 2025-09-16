@@ -3,9 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown_example/demos/custom_table_demo.dart';
 import '../demos/basic_markdown_demo.dart';
 import '../demos/centered_header_demo.dart';
-import '../demos/custom_bullet_list_demo.dart';
 import '../demos/extended_emoji_demo.dart';
 import '../demos/markdown_body_shrink_wrap_demo.dart';
 import '../demos/minimal_markdown_demo.dart';
@@ -22,20 +22,25 @@ class HomeScreen extends StatelessWidget {
 
   static const String routeName = '/homeScreen';
 
-  final List<MarkdownDemoWidget> _demos = <MarkdownDemoWidget>[
-    const MinimalMarkdownDemo(),
-    const BasicMarkdownDemo(),
-    const WrapAlignmentDemo(),
-    const SubscriptSyntaxDemo(),
-    const ExtendedEmojiDemo(),
-    OriginalMarkdownDemo(),
-    const CenteredHeaderDemo(),
-    const MarkdownBodyShrinkWrapDemo(),
-    const CustomBulletListDemo(),
-  ];
+  List<Widget> _demos = [];
 
   @override
   Widget build(BuildContext context) {
+    _demos = [
+      TextButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CustomTableDemo()));
+          },
+          child: Text('tablexxxx')),
+      const MinimalMarkdownDemo(),
+      const BasicMarkdownDemo(),
+      const WrapAlignmentDemo(),
+      const SubscriptSyntaxDemo(),
+      const ExtendedEmojiDemo(),
+      OriginalMarkdownDemo(),
+      const CenteredHeaderDemo(),
+      const MarkdownBodyShrinkWrapDemo(),
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -45,9 +50,12 @@ class HomeScreen extends StatelessWidget {
         child: ColoredBox(
           color: Colors.black12,
           child: ListView(
-            children: <Widget>[
-              for (final MarkdownDemoWidget demo in _demos) DemoCard(widget: demo),
-            ],
+            children: _demos.map((demo) {
+              if (demo is MarkdownDemoWidget) {
+                return DemoCard(widget: demo);
+              }
+              return demo;
+            }).toList(),
           ),
         ),
       ),

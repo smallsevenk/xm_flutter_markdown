@@ -297,8 +297,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         _tables.add(_TableElement());
       } else if (tag == 'tr') {
         final int length = _tables.single.rows.length;
-        BoxDecoration? decoration =
-            styleSheet.tableCellsDecoration as BoxDecoration?;
+        BoxDecoration? decoration = styleSheet.tableCellsDecoration as BoxDecoration?;
         if (length == 0 || length.isOdd) {
           decoration = null;
         }
@@ -336,9 +335,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       // The Markdown parser passes empty table data tags for blank
       // table cells. Insert a text node with an empty string in this
       // case for the table cell to get properly created.
-      if (element.tag == 'td' &&
-          element.children != null &&
-          element.children!.isEmpty) {
+      if (element.tag == 'td' && element.children != null && element.children!.isEmpty) {
         element.children!.add(md.Text(''));
       }
 
@@ -356,8 +353,7 @@ class MarkdownBuilder implements md.NodeVisitor {
   String? extractTextFromElement(md.Node element) {
     return element is md.Element && (element.children?.isNotEmpty ?? false)
         ? element.children!
-            .map((md.Node e) =>
-                e is md.Text ? e.text : extractTextFromElement(e))
+            .map((md.Node e) => e is md.Text ? e.text : extractTextFromElement(e))
             .join()
         : (element is md.Element && (element.attributes.isNotEmpty)
             ? element.attributes['alt']
@@ -391,8 +387,7 @@ class MarkdownBuilder implements md.NodeVisitor {
       // Leading spaces in paragraph or list item are ignored
       // https://github.github.com/gfm/#example-192
       // https://github.github.com/gfm/#example-236
-      if (const <String>['ul', 'ol', 'li', 'p', 'br']
-          .contains(_lastVisitedTag)) {
+      if (const <String>['ul', 'ol', 'li', 'p', 'br'].contains(_lastVisitedTag)) {
         text = text.replaceAll(leadingSpacesPattern, '');
       }
 
@@ -404,12 +399,10 @@ class MarkdownBuilder implements md.NodeVisitor {
 
     Widget? child;
     if (_blocks.isNotEmpty && builders.containsKey(_blocks.last.tag)) {
-      child = builders[_blocks.last.tag!]!
-          .visitText(text, styleSheet.styles[_blocks.last.tag!]);
+      child = builders[_blocks.last.tag!]!.visitText(text, styleSheet.styles[_blocks.last.tag!]);
     } else if (_blocks.last.tag == 'pre') {
       child = _ScrollControllerBuilder(
-          builder: (BuildContext context, ScrollController preScrollController,
-              Widget? child) {
+          builder: (BuildContext context, ScrollController preScrollController, Widget? child) {
             return Scrollbar(
               controller: preScrollController,
               child: SingleChildScrollView(
@@ -453,9 +446,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         if (current.children.isNotEmpty) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: fitContent
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.stretch,
+            crossAxisAlignment: fitContent ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
             children: current.children,
           );
         } else {
@@ -489,14 +480,13 @@ class MarkdownBuilder implements md.NodeVisitor {
           }
           child = Row(
             mainAxisSize: fitContent ? MainAxisSize.min : MainAxisSize.max,
-            textBaseline: listItemCrossAxisAlignment ==
-                    MarkdownListItemCrossAxisAlignment.start
+            textBaseline: listItemCrossAxisAlignment == MarkdownListItemCrossAxisAlignment.start
                 ? null
                 : TextBaseline.alphabetic,
-            crossAxisAlignment: listItemCrossAxisAlignment ==
-                    MarkdownListItemCrossAxisAlignment.start
-                ? CrossAxisAlignment.start
-                : CrossAxisAlignment.baseline,
+            crossAxisAlignment:
+                listItemCrossAxisAlignment == MarkdownListItemCrossAxisAlignment.start
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.baseline,
             children: <Widget>[
               SizedBox(
                 width: styleSheet.listIndent! +
@@ -515,8 +505,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         if (styleSheet.tableColumnWidth is FixedColumnWidth ||
             styleSheet.tableColumnWidth is IntrinsicColumnWidth) {
           child = _ScrollControllerBuilder(
-            builder: (BuildContext context,
-                ScrollController tableScrollController, Widget? child) {
+            builder: (BuildContext context, ScrollController tableScrollController, Widget? child) {
               return Scrollbar(
                 controller: tableScrollController,
                 thumbVisibility: styleSheet.tableScrollbarThumbVisibility,
@@ -681,8 +670,8 @@ class MarkdownBuilder implements md.NodeVisitor {
 
     Widget child;
     if (sizedImageBuilder != null) {
-      final MarkdownImageConfig config = MarkdownImageConfig(
-          uri: uri, alt: alt, title: title, height: height, width: width);
+      final MarkdownImageConfig config =
+          MarkdownImageConfig(uri: uri, alt: alt, title: title, height: height, width: width);
       child = sizedImageBuilder!(config);
     } else if (imageBuilder != null) {
       child = imageBuilder!(uri, alt, title);
@@ -691,8 +680,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     }
 
     if (_linkHandlers.isNotEmpty) {
-      final TapGestureRecognizer recognizer =
-          _linkHandlers.last as TapGestureRecognizer;
+      final TapGestureRecognizer recognizer = _linkHandlers.last as TapGestureRecognizer;
       return GestureDetector(onTap: recognizer.onTap, child: child);
     } else {
       return child;
@@ -723,9 +711,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         child: bulletBuilder!(
           MarkdownBulletParameters(
             index: index,
-            style: isUnordered
-                ? BulletStyle.unorderedList
-                : BulletStyle.orderedList,
+            style: isUnordered ? BulletStyle.unorderedList : BulletStyle.orderedList,
             nestLevel: _listIndents.length - 1,
           ),
         ),
@@ -755,22 +741,24 @@ class MarkdownBuilder implements md.NodeVisitor {
 
   Widget _buildTableCell(List<Widget?> children, {TextAlign? textAlign}) {
     return TableCell(
-      child: Padding(
-        padding: styleSheet.tableCellsPadding!,
-        child: DefaultTextStyle(
-          style: styleSheet.tableBody!,
-          textAlign: textAlign,
-          child: Wrap(
-            alignment: switch (textAlign) {
-              TextAlign.left => WrapAlignment.start,
-              TextAlign.center => WrapAlignment.center,
-              TextAlign.right => WrapAlignment.end,
-              _ => WrapAlignment.start,
-            },
-            children: children as List<Widget>,
-          ),
-        ),
-      ),
+      child: ConstrainedBox(
+          constraints: BoxConstraints(),
+          child: Padding(
+            padding: styleSheet.tableCellsPadding!,
+            child: DefaultTextStyle(
+              style: styleSheet.tableBody!,
+              textAlign: textAlign,
+              child: Wrap(
+                alignment: switch (textAlign) {
+                  TextAlign.left => WrapAlignment.start,
+                  TextAlign.center => WrapAlignment.center,
+                  TextAlign.right => WrapAlignment.end,
+                  _ => WrapAlignment.start,
+                },
+                children: children as List<Widget>,
+              ),
+            ),
+          )),
     );
   }
 
@@ -849,8 +837,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     }
 
     // Merge the style of the parent with the style of the children
-    final Iterable<InlineSpan> spans =
-        span.children!.map((InlineSpan childSpan) {
+    final Iterable<InlineSpan> spans = span.children!.map((InlineSpan childSpan) {
       if (childSpan is TextSpan) {
         return TextSpan(
           text: childSpan.text,
@@ -904,8 +891,7 @@ class MarkdownBuilder implements md.NodeVisitor {
 
       if (lastIsText) {
         // Removes last widget from the list for merging and extracts its spans
-        spans.addAll(_getInlineSpansFromSpan(
-            _getInlineSpanFromText(mergedWidgets.removeLast())!));
+        spans.addAll(_getInlineSpansFromSpan(_getInlineSpanFromText(mergedWidgets.removeLast())!));
       }
 
       spans.addAll(_getInlineSpansFromSpan(currentSpan));
@@ -918,9 +904,8 @@ class MarkdownBuilder implements md.NodeVisitor {
         mergedWidget = child;
       } else {
         final InlineSpan first = spans.first;
-        final TextSpan textSpan = (spans.length == 1 && first is TextSpan)
-            ? first
-            : TextSpan(children: spans);
+        final TextSpan textSpan =
+            (spans.length == 1 && first is TextSpan) ? first : TextSpan(children: spans);
         mergedWidget = _buildRichText(textSpan, textAlign: textAlign);
       }
 
@@ -1010,8 +995,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     final List<InlineSpan> mergedSpans = <InlineSpan>[];
 
     for (int index = 1; index < textSpans.length; index++) {
-      final InlineSpan previous =
-          mergedSpans.isEmpty ? textSpans.first : mergedSpans.removeLast();
+      final InlineSpan previous = mergedSpans.isEmpty ? textSpans.first : mergedSpans.removeLast();
       final InlineSpan nextChild = textSpans[index];
 
       final bool previousIsTextSpan = previous is TextSpan;
@@ -1079,8 +1063,7 @@ class _ScrollControllerBuilder extends StatefulWidget {
   final Widget? child;
 
   @override
-  State<_ScrollControllerBuilder> createState() =>
-      _ScrollControllerBuilderState();
+  State<_ScrollControllerBuilder> createState() => _ScrollControllerBuilderState();
 }
 
 class _ScrollControllerBuilderState extends State<_ScrollControllerBuilder> {

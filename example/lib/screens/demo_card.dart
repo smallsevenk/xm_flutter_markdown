@@ -9,29 +9,31 @@ import '../shared/markdown_demo_widget.dart';
 // ignore_for_file: public_member_api_docs
 
 class DemoCard extends StatelessWidget {
-  const DemoCard({super.key, required this.widget});
+  const DemoCard({super.key, required this.widget, this.onTap});
 
   final MarkdownDemoWidget widget;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        DemoScreen.routeName,
-        arguments: widget,
-      ),
+      onTap: onTap ??
+          () {
+            Navigator.pushNamed(
+              context,
+              DemoScreen.routeName,
+              arguments: widget,
+            );
+          },
       child: Container(
         alignment: Alignment.center,
         child: ConstrainedBox(
-          constraints:
-              const BoxConstraints(minHeight: 50, minWidth: 425, maxWidth: 425),
+          constraints: const BoxConstraints(minHeight: 50, minWidth: 425, maxWidth: 425),
           child: Card(
               color: Colors.blue,
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
