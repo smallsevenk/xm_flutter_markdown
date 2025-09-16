@@ -91,8 +91,7 @@ class SubscriptBuilder extends MarkdownElementBuilder {
 /// The subscript syntax demo provides an example of creating an inline syntax
 /// object which defines the syntax for the Markdown inline parser and an
 /// accompanying Markdown element builder object to handle subscript tags.
-class SubscriptSyntaxDemo extends StatelessWidget
-    implements MarkdownDemoWidget {
+class SubscriptSyntaxDemo extends StatelessWidget implements MarkdownDemoWidget {
   const SubscriptSyntaxDemo({super.key});
 
   static const String _title = 'Subscript Syntax Demo';
@@ -121,8 +120,7 @@ class SubscriptSyntaxDemo extends StatelessWidget
             builders: <String, MarkdownElementBuilder>{
               'sub': SubscriptBuilder(),
             },
-            extensionSet: md.ExtensionSet(
-                <md.BlockSyntax>[], <md.InlineSyntax>[SubscriptSyntax()]),
+            extensionSet: md.ExtensionSet(<md.BlockSyntax>[], <md.InlineSyntax>[SubscriptSyntax()]),
           );
         } else {
           return const CircularProgressIndicator();
