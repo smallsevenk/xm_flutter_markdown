@@ -4,6 +4,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:markdown/markdown.dart' as md;
 
 import '_functions_io.dart' if (dart.library.js_interop) '_functions_web.dart';
@@ -138,6 +139,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     required this.bulletBuilder,
     required this.builders,
     required this.paddingBuilders,
+    required this.markdownSource,
     required this.listItemCrossAxisAlignment,
     this.fitContent = false,
     this.onSelectionChanged,
@@ -148,6 +150,9 @@ class MarkdownBuilder implements md.NodeVisitor {
 
   /// A delegate that controls how link and `pre` elements behave.
   final MarkdownBuilderDelegate delegate;
+
+  /// The original Markdown source used to create the parsed nodes.
+  final String markdownSource;
 
   /// If true, the text is selectable.
   ///
@@ -523,7 +528,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         } else {
           child = _buildTable();
         }
-        _buildTableConainer(child);
+        child = _buildTableConainer(child);
       } else if (tag == 'blockquote') {
         _isInBlockquote = false;
         child = DecoratedBox(
@@ -638,19 +643,19 @@ class MarkdownBuilder implements md.NodeVisitor {
     _lastVisitedTag = tag;
   }
 
-  void _buildTableConainer(Widget child) {
-    child = Container(
+  Widget _buildTableConainer(Widget child) {
+    return Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.red, width: 1),
-          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[200]!, width: 1),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Column(children: [
           Container(
             width: double.infinity,
             height: 44,
             decoration: BoxDecoration(
-              color: Colors.red,
-              border: BoxBorder.fromLTRB(bottom: BorderSide(color: Colors.red, width: 1)),
+              color: Colors.grey[300],
+              border: BoxBorder.fromLTRB(bottom: BorderSide(color: Colors.grey[200]!, width: 1)),
             ),
             child: Padding(
               padding: EdgeInsetsGeometry.all(10),
@@ -668,12 +673,72 @@ class MarkdownBuilder implements md.NodeVisitor {
                   IconButton(
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
-                    onPressed: () {},
+                    onPressed: () {
+                      // 复制表格内容到剪贴板
+                      Clipboard.setData(ClipboardData(text: markdownSource));
+                      ScaffoldMessenger.of(delegate.context).showSnackBar(
+                        SnackBar(content: Text('Markdown 源数据已复制')),
+                      );
+                    },
                     icon: Icon(Icons.copy_all_rounded, size: 20, color: Colors.grey[700]),
                   ),
                   IconButton(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    onPressed: () {},
+                    onPressed: () async {
+                      // 1. 设置横屏
+                      await SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.landscapeLeft,
+                        DeviceOrientation.landscapeRight,
+                      ]);
+                      // 2. 跳转到全屏表格页面
+                      await showDialog(
+                        context: delegate.context,
+                        useSafeArea: false,
+                        builder: (context) => Scaffold(
+                          appBar: AppBar(
+                            title: const Text('全屏表格'),
+                            leading: IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () async {
+                                // 恢复竖屏
+                                await SystemChrome.setPreferredOrientations([
+                                  DeviceOrientation.portraitUp,
+                                  DeviceOrientation.portraitDown,
+                                ]);
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            actions: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () {
+                                  // 复制传入的内容到剪贴板
+                                },
+                                icon: Icon(Icons.copy_all_rounded, size: 20, color: Colors.white),
+                              ),
+                              // IconButton(
+                              //   padding: EdgeInsets.zero,
+                              //   visualDensity: VisualDensity.compact,
+                              //   onPressed: () {
+                              //     // 将表格生成图片保存到相册
+                              //   },
+                              //   icon: Icon(Icons.copy_all_rounded, size: 20, color: Colors.white),
+                              // ),
+                            ],
+                          ),
+                          body: SafeArea(
+                              child: SingleChildScrollView(
+                            child: child,
+                          )), // child 就是表格
+                        ),
+                      );
+                      // 3. 恢复竖屏
+                      await SystemChrome.setPreferredOrientations([
+                        DeviceOrientation.portraitUp,
+                        DeviceOrientation.portraitDown,
+                      ]);
+                    },
                     visualDensity: VisualDensity.compact,
                     icon: Icon(Icons.open_in_full_rounded, size: 20, color: Colors.grey[700]),
                   ),
@@ -791,7 +856,7 @@ class MarkdownBuilder implements md.NodeVisitor {
   Widget _buildTableCell(List<Widget?> children, {TextAlign? textAlign}) {
     return TableCell(
       child: ConstrainedBox(
-          constraints: BoxConstraints(),
+          constraints: styleSheet.tableCellConstraints ?? const BoxConstraints(),
           child: Padding(
             padding: styleSheet.tableCellsPadding!,
             child: DefaultTextStyle(

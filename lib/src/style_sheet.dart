@@ -41,6 +41,7 @@ class MarkdownStyleSheet {
     this.tablePadding,
     this.tableBorder,
     this.tableColumnWidth,
+    this.tableCellConstraints,
     this.tableScrollbarThumbVisibility,
     this.tableCellsPadding,
     this.tableCellsDecoration,
@@ -71,9 +72,7 @@ class MarkdownStyleSheet {
         textScaler = textScaler ??
             // Internally, only textScaler is used, so convert the scale factor
             // to a linear scaler.
-            (textScaleFactor == null
-                ? null
-                : TextScaler.linear(textScaleFactor)),
+            (textScaleFactor == null ? null : TextScaler.linear(textScaleFactor)),
         _styles = <String, TextStyle?>{
           'a': a,
           'p': p,
@@ -318,6 +317,7 @@ class MarkdownStyleSheet {
         color: theme.dividerColor,
       ),
       tableColumnWidth: const FlexColumnWidth(),
+      tableCellConstraints: BoxConstraints(),
       tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: const BoxDecoration(),
       blockquotePadding: const EdgeInsets.all(8.0),
@@ -375,6 +375,7 @@ class MarkdownStyleSheet {
     TextAlign? tableHeadAlign,
     EdgeInsets? tablePadding,
     TableBorder? tableBorder,
+    BoxConstraints? tableCellConstraints,
     TableColumnWidth? tableColumnWidth,
     bool? tableScrollbarThumbVisibility,
     EdgeInsets? tableCellsPadding,
@@ -442,18 +443,17 @@ class MarkdownStyleSheet {
       tableHeadAlign: tableHeadAlign ?? this.tableHeadAlign,
       tablePadding: tablePadding ?? this.tablePadding,
       tableBorder: tableBorder ?? this.tableBorder,
+      tableCellConstraints: tableCellConstraints ?? this.tableCellConstraints,
       tableColumnWidth: tableColumnWidth ?? this.tableColumnWidth,
       tableScrollbarThumbVisibility: tableScrollbarThumbVisibility,
       tableCellsPadding: tableCellsPadding ?? this.tableCellsPadding,
       tableCellsDecoration: tableCellsDecoration ?? this.tableCellsDecoration,
-      tableVerticalAlignment:
-          tableVerticalAlignment ?? this.tableVerticalAlignment,
+      tableVerticalAlignment: tableVerticalAlignment ?? this.tableVerticalAlignment,
       blockquotePadding: blockquotePadding ?? this.blockquotePadding,
       blockquoteDecoration: blockquoteDecoration ?? this.blockquoteDecoration,
       codeblockPadding: codeblockPadding ?? this.codeblockPadding,
       codeblockDecoration: codeblockDecoration ?? this.codeblockDecoration,
-      horizontalRuleDecoration:
-          horizontalRuleDecoration ?? this.horizontalRuleDecoration,
+      horizontalRuleDecoration: horizontalRuleDecoration ?? this.horizontalRuleDecoration,
       textAlign: textAlign ?? this.textAlign,
       h1Align: h1Align ?? this.h1Align,
       h2Align: h2Align ?? this.h2Align,
@@ -465,8 +465,7 @@ class MarkdownStyleSheet {
       orderedListAlign: orderedListAlign ?? this.orderedListAlign,
       blockquoteAlign: blockquoteAlign ?? this.blockquoteAlign,
       codeblockAlign: codeblockAlign ?? this.codeblockAlign,
-      superscriptFontFeatureTag:
-          superscriptFontFeatureTag ?? this.superscriptFontFeatureTag,
+      superscriptFontFeatureTag: superscriptFontFeatureTag ?? this.superscriptFontFeatureTag,
       textScaler: newTextScaler,
       textScaleFactor: nextTextScaleFactor,
     );
@@ -510,6 +509,7 @@ class MarkdownStyleSheet {
       tableHeadAlign: other.tableHeadAlign,
       tablePadding: other.tablePadding,
       tableBorder: other.tableBorder,
+      tableCellConstraints: other.tableCellConstraints,
       tableColumnWidth: other.tableColumnWidth,
       tableScrollbarThumbVisibility: other.tableScrollbarThumbVisibility,
       tableCellsPadding: other.tableCellsPadding,
@@ -636,6 +636,9 @@ class MarkdownStyleSheet {
 
   /// The [TableColumnWidth] to use for `th` and `td` elements.
   final TableColumnWidth? tableColumnWidth;
+
+  /// The optional [BoxConstraints] to apply to each table cell.
+  final BoxConstraints? tableCellConstraints;
 
   /// The scrollbar thumbVisibility when the table is scrollable.
   final bool? tableScrollbarThumbVisibility;

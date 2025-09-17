@@ -19,6 +19,11 @@ const String _markdownData = '''
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+| 2025-09-17 | da雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 ''';
 
 class CustomTableDemo extends StatelessWidget {
@@ -38,6 +43,10 @@ class CustomTableDemo extends StatelessWidget {
             tableCellsDecoration: BoxDecoration(
               border: Border.all(color: Colors.grey[200]!, width: 1),
             ),
+            tableHead:
+                TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1A1A1A), fontSize: 15),
+            tableHeadAlign: TextAlign.left,
+            tableCellConstraints: BoxConstraints(maxWidth: 200),
             tableColumnWidth: IntrinsicColumnWidth(),
             tableBorder: TableBorder(horizontalInside: border, verticalInside: border),
           ),
