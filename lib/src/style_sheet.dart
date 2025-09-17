@@ -36,6 +36,7 @@ class MarkdownStyleSheet {
     this.listBullet,
     this.listBulletPadding,
     this.tableHead,
+    this.tableHeadDecoration,
     this.tableBody,
     this.tableHeadAlign,
     this.tablePadding,
@@ -310,6 +311,7 @@ class MarkdownStyleSheet {
       listBullet: theme.textTheme.bodyMedium,
       listBulletPadding: const EdgeInsets.only(right: 4),
       tableHead: const TextStyle(fontWeight: FontWeight.w600),
+      tableHeadDecoration: const BoxDecoration(),
       tableBody: theme.textTheme.bodyMedium,
       tableHeadAlign: TextAlign.center,
       tablePadding: const EdgeInsets.only(bottom: 4.0),
@@ -371,6 +373,7 @@ class MarkdownStyleSheet {
     TextStyle? listBullet,
     EdgeInsets? listBulletPadding,
     TextStyle? tableHead,
+    Decoration? tableHeadDecoration,
     TextStyle? tableBody,
     TextAlign? tableHeadAlign,
     EdgeInsets? tablePadding,
@@ -439,6 +442,7 @@ class MarkdownStyleSheet {
       listBullet: listBullet ?? this.listBullet,
       listBulletPadding: listBulletPadding ?? this.listBulletPadding,
       tableHead: tableHead ?? this.tableHead,
+      tableHeadDecoration: tableHeadDecoration ?? this.tableHeadDecoration,
       tableBody: tableBody ?? this.tableBody,
       tableHeadAlign: tableHeadAlign ?? this.tableHeadAlign,
       tablePadding: tablePadding ?? this.tablePadding,
@@ -505,6 +509,7 @@ class MarkdownStyleSheet {
       listBullet: listBullet!.merge(other.listBullet),
       listBulletPadding: other.listBulletPadding,
       tableHead: tableHead!.merge(other.tableHead),
+      tableHeadDecoration: other.tableHeadDecoration,
       tableBody: tableBody!.merge(other.tableBody),
       tableHeadAlign: other.tableHeadAlign,
       tablePadding: other.tablePadding,
@@ -621,6 +626,9 @@ class MarkdownStyleSheet {
 
   /// The [TextStyle] to use for `th` elements.
   final TextStyle? tableHead;
+
+  /// The decoration to use for `th` elements.
+  final Decoration? tableHeadDecoration;
 
   /// The [TextStyle] to use for `td` elements.
   final TextStyle? tableBody;

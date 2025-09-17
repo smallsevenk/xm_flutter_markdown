@@ -46,6 +46,9 @@ typedef MarkdownTapLinkCallback = void Function(String text, String? href, Strin
 /// Used by [MarkdownWidget.sizedImageBuilder]
 typedef MarkdownSizedImageBuilder = Widget Function(MarkdownImageConfig config);
 
+/// Configuration for table used by [MarkdownTableBuilder].
+typedef MarkdownTableBuilder = Widget Function(Widget table);
+
 /// Signature for custom image widget.
 ///
 /// Used by [MarkdownWidget.imageBuilder]
@@ -234,6 +237,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.extensionSet,
     @Deprecated('Use sizedImageBuilder instead') this.imageBuilder,
     this.sizedImageBuilder,
+    this.tableBuilder,
     this.checkboxBuilder,
     this.bulletBuilder,
     this.builders = const <String, MarkdownElementBuilder>{},
@@ -295,6 +299,9 @@ abstract class MarkdownWidget extends StatefulWidget {
 
   /// {@macro flutter_markdown.builder.MarkdownBuilder.sizedImageBuilder}
   final MarkdownSizedImageBuilder? sizedImageBuilder;
+
+  /// Call when build a table widget.
+  final MarkdownTableBuilder? tableBuilder;
 
   /// Call when build a checkbox widget.
   final MarkdownCheckboxBuilder? checkboxBuilder;
@@ -405,6 +412,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget> implements MarkdownBuil
       imageDirectory: widget.imageDirectory,
       imageBuilder: widget.imageBuilder,
       sizedImageBuilder: widget.sizedImageBuilder,
+      tableBuilder: widget.tableBuilder,
       checkboxBuilder: widget.checkboxBuilder,
       bulletBuilder: widget.bulletBuilder,
       builders: widget.builders,
@@ -482,6 +490,7 @@ class MarkdownBody extends MarkdownWidget {
     super.extensionSet,
     @Deprecated('Use sizedImageBuilder instead.') super.imageBuilder,
     super.sizedImageBuilder,
+    super.tableBuilder,
     super.checkboxBuilder,
     super.bulletBuilder,
     super.builders,
@@ -537,6 +546,7 @@ class Markdown extends MarkdownWidget {
     super.extensionSet,
     @Deprecated('Use sizedImageBuilder instead.') super.imageBuilder,
     super.sizedImageBuilder,
+    super.tableBuilder,
     super.checkboxBuilder,
     super.bulletBuilder,
     super.builders,

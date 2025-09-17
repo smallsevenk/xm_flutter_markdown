@@ -135,6 +135,7 @@ class MarkdownBuilder implements md.NodeVisitor {
     required this.imageDirectory,
     @Deprecated('Use sizedImageBuilder instead') this.imageBuilder,
     required this.sizedImageBuilder,
+    required this.tableBuilder,
     required this.checkboxBuilder,
     required this.bulletBuilder,
     required this.builders,
@@ -199,6 +200,9 @@ class MarkdownBuilder implements md.NodeVisitor {
   ///
   /// {@endtemplate}
   final MarkdownSizedImageBuilder? sizedImageBuilder;
+
+  /// Defines how to build a table widget.
+  final MarkdownTableBuilder? tableBuilder;
 
   /// Call when build a checkbox widget.
   final MarkdownCheckboxBuilder? checkboxBuilder;
@@ -307,7 +311,7 @@ class MarkdownBuilder implements md.NodeVisitor {
           decoration = null;
         }
         _tables.single.rows.add(TableRow(
-          decoration: decoration,
+          decoration: length == 0 ? styleSheet.tableHeadDecoration ?? decoration : decoration,
           // TODO(stuartmorgan): This should be fixed, not suppressed; enabling
           // this lint warning exposed that the builder is modifying the
           // children of TableRows, even though they are @immutable.
@@ -507,28 +511,27 @@ class MarkdownBuilder implements md.NodeVisitor {
           );
         }
       } else if (tag == 'table') {
-        if (styleSheet.tableColumnWidth is FixedColumnWidth ||
-            styleSheet.tableColumnWidth is IntrinsicColumnWidth) {
-          child = _ScrollControllerBuilder(
-            builder: (BuildContext context, ScrollController tableScrollController, Widget? child) {
-              return Scrollbar(
+        var table = child = _ScrollControllerBuilder(
+          builder: (BuildContext context, ScrollController tableScrollController, Widget? child) {
+            return Scrollbar(
+              controller: tableScrollController,
+              thumbVisibility: styleSheet.tableScrollbarThumbVisibility,
+              child: SingleChildScrollView(
                 controller: tableScrollController,
-                thumbVisibility: styleSheet.tableScrollbarThumbVisibility,
-                child: SingleChildScrollView(
-                  controller: tableScrollController,
-                  scrollDirection: Axis.horizontal,
-                  padding: styleSheet.tablePadding,
-                  physics: ClampingScrollPhysics(),
-                  child: child,
-                ),
-              );
-            },
-            child: _buildTable(),
-          );
+                scrollDirection: Axis.horizontal,
+                padding: styleSheet.tablePadding,
+                physics: ClampingScrollPhysics(),
+                child: child,
+              ),
+            );
+          },
+          child: _buildTable(),
+        );
+        if (tableBuilder != null) {
+          child = tableBuilder!(table);
         } else {
-          child = _buildTable();
+          child = _buildTableConainer(table);
         }
-        child = _buildTableConainer(child);
       } else if (tag == 'blockquote') {
         _isInBlockquote = false;
         child = DecoratedBox(
