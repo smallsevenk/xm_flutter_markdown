@@ -5,6 +5,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/src/xm_scrollbar.dart';
 import 'package:markdown/markdown.dart' as md;
 
 import '_functions_io.dart' if (dart.library.js_interop) '_functions_web.dart';
@@ -513,9 +514,11 @@ class MarkdownBuilder implements md.NodeVisitor {
       } else if (tag == 'table') {
         var table = child = _ScrollControllerBuilder(
           builder: (BuildContext context, ScrollController tableScrollController, Widget? child) {
-            return Scrollbar(
+            return BottomScrollbar(
               controller: tableScrollController,
-              thumbVisibility: styleSheet.tableScrollbarThumbVisibility,
+              thumbVisibility: (styleSheet.tableScrollbarThumbVisibility ?? false)
+                  ? ScrollbarThumbVisibility.always
+                  : ScrollbarThumbVisibility.scrolling,
               child: SingleChildScrollView(
                 controller: tableScrollController,
                 scrollDirection: Axis.horizontal,

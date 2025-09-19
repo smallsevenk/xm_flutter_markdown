@@ -25,6 +25,7 @@ const String _markdownData = '''
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-17 | 小雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
 | 2025-09-17 | da雨   | 25°C  | 2025-09-15 | 晴    | 28°C  |2025-09-15 | 晴    | 28°C  |
+
 ''';
 
 class CustomTableDemo extends StatelessWidget {
@@ -39,11 +40,9 @@ class CustomTableDemo extends StatelessWidget {
         appBar: AppBar(title: const Text(_title)),
         body: SafeArea(
           child: Markdown(
+            shrinkWrap: true,
             data: _markdownData,
             styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-              // tableCellsDecoration: BoxDecoration(
-              //   border: Border.all(color: Colors.grey[200]!, width: 1),
-              // ),
               tableHead:
                   TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1A1A1A), fontSize: 15),
               tableHeadDecoration: BoxDecoration(
@@ -65,6 +64,21 @@ class CustomTableDemo extends StatelessWidget {
   }
 
   Widget _buildTableConainer(Widget child, context) {
+    return CSMDTableContanier(
+      child: child,
+    );
+  }
+}
+
+class CSMDTableContanier extends StatelessWidget {
+  final Widget child;
+  const CSMDTableContanier({
+    super.key,
+    this.child = const MarkdownBody(data: _markdownData),
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[200]!, width: 1),
