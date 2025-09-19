@@ -665,7 +665,7 @@ class MarkdownBuilder implements md.NodeVisitor {
               border: BoxBorder.fromLTRB(bottom: BorderSide(color: Colors.grey[200]!, width: 1)),
             ),
             child: Padding(
-              padding: EdgeInsetsGeometry.all(10),
+              padding: EdgeInsets.all(10),
               child: Row(
                 children: [
                   Text(
