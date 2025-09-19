@@ -32,22 +32,33 @@ class _BottomScrollbarState extends State<BottomScrollbar> {
   bool _showThumb = false;
 
   void _updateThumb() {
-    final maxScroll = widget.controller.position.maxScrollExtent;
-    final viewport = widget.controller.position.viewportDimension;
-    if (maxScroll <= 0) {
+    if (widget.controller.hasClients && mounted) {
+      final maxScrollExtent = widget.controller.position.maxScrollExtent;
+      final viewportDimension = widget.controller.position.viewportDimension;
+      final scrollOffset = widget.controller.offset;
+
+      if (maxScrollExtent <= 0) {
+        setState(() {
+          _thumbOffset = 0;
+          _thumbWidth = viewportDimension;
+        });
+        return;
+      }
+
+      final thumbWidth =
+          (viewportDimension / (maxScrollExtent + viewportDimension)) * viewportDimension;
+      final thumbOffset = (scrollOffset / maxScrollExtent) * (viewportDimension - thumbWidth);
+
+      setState(() {
+        _thumbOffset = thumbOffset.clamp(0, viewportDimension - thumbWidth);
+        _thumbWidth = thumbWidth.clamp(20, viewportDimension);
+      });
+    } else {
       setState(() {
         _thumbOffset = 0;
-        _thumbWidth = viewport;
+        _thumbWidth = 0;
       });
-      return;
     }
-    final ratio = viewport / (maxScroll + viewport);
-    final thumbWidth = viewport * ratio;
-    final thumbOffset = (widget.controller.offset / maxScroll) * (viewport - thumbWidth);
-    setState(() {
-      _thumbOffset = thumbOffset;
-      _thumbWidth = thumbWidth;
-    });
   }
 
   @override

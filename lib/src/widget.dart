@@ -47,7 +47,7 @@ typedef MarkdownTapLinkCallback = void Function(String text, String? href, Strin
 typedef MarkdownSizedImageBuilder = Widget Function(MarkdownImageConfig config);
 
 /// Configuration for table used by [MarkdownTableBuilder].
-typedef MarkdownTableBuilder = Widget Function(Widget table);
+typedef MarkdownTableBuilder = Widget Function(Widget scrollBuilder, Table table);
 
 /// Signature for custom image widget.
 ///

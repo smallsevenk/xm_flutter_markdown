@@ -512,7 +512,8 @@ class MarkdownBuilder implements md.NodeVisitor {
           );
         }
       } else if (tag == 'table') {
-        var table = child = _ScrollControllerBuilder(
+        var table = _buildTable();
+        var scrollBuilder = _ScrollControllerBuilder(
           builder: (BuildContext context, ScrollController tableScrollController, Widget? child) {
             return BottomScrollbar(
               controller: tableScrollController,
@@ -528,12 +529,12 @@ class MarkdownBuilder implements md.NodeVisitor {
               ),
             );
           },
-          child: _buildTable(),
+          child: table,
         );
         if (tableBuilder != null) {
-          child = tableBuilder!(table);
+          child = tableBuilder!(scrollBuilder, table);
         } else {
-          child = _buildTableConainer(table);
+          child = _buildTableConainer(scrollBuilder);
         }
       } else if (tag == 'blockquote') {
         _isInBlockquote = false;

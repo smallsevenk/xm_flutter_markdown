@@ -40,40 +40,35 @@ class CustomTableDemo extends StatelessWidget {
         appBar: AppBar(title: const Text(_title)),
         body: SafeArea(
           child: Markdown(
-            shrinkWrap: true,
-            data: _markdownData,
-            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-              tableHead:
-                  TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1A1A1A), fontSize: 15),
-              tableHeadDecoration: BoxDecoration(
-                color: Colors.grey[200],
+              shrinkWrap: true,
+              data: _markdownData,
+              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                tableHead:
+                    TextStyle(fontWeight: FontWeight.w600, color: Color(0xff1A1A1A), fontSize: 15),
+                tableHeadDecoration: BoxDecoration(
+                  color: Colors.grey[200],
+                ),
+                tableHeadAlign: TextAlign.left,
+                tableCellConstraints: BoxConstraints(maxWidth: 200),
+                tableColumnWidth: IntrinsicColumnWidth(),
+                tableBorder: TableBorder(
+                  horizontalInside: border,
+                  verticalInside: border,
+                ),
               ),
-              tableHeadAlign: TextAlign.left,
-              tableCellConstraints: BoxConstraints(maxWidth: 200),
-              tableColumnWidth: IntrinsicColumnWidth(),
-              tableBorder: TableBorder(
-                horizontalInside: border,
-                verticalInside: border,
-              ),
-            ),
-            tableBuilder: (table) {
-              return _buildTableConainer(table, context);
-            },
-          ),
+              tableBuilder: (scrollBuilder, table) => CSMDTableContanier(
+                    child: scrollBuilder,
+                  )),
         ));
-  }
-
-  Widget _buildTableConainer(Widget child, context) {
-    return CSMDTableContanier(
-      child: child,
-    );
   }
 }
 
 class CSMDTableContanier extends StatelessWidget {
   final Widget child;
+  final Table? table;
   const CSMDTableContanier({
     super.key,
+    this.table,
     this.child = const MarkdownBody(data: _markdownData),
   });
 
